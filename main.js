@@ -28,6 +28,7 @@ function storeUrl()
 saveBtn.addEventListener("click", function () {
     console.log("save button clicked!");
     url.push(inputEl.value);
+    storeUrl();
 })
 
 tabBtn.addEventListener("click", function () {
