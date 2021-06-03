@@ -10,6 +10,8 @@ let url = [];
 function render(){ 
     console.log("saved url button clicked");
     let listEl = "";
+    url = getUrl(url,"url");
+    console.log(url);
     for (let i = 0; i < url.length; i++) {
         listEl += `<li>
             <a href="${url[i]}"> 
@@ -18,6 +20,11 @@ function render(){
         </li>`; 
     }
     ulEl.innerHTML = listEl;
+}
+function getUrl(variable,key)
+{
+    variable = JSON.parse(localStorage.getItem(key));
+    return variable;
 }
 
 function storeUrl()
@@ -37,6 +44,7 @@ tabBtn.addEventListener("click", function () {
 
 deleteBtn.addEventListener("dblclick", function () {
     console.log("deleted button double clicked!");
+    
 })
 
 savedUrlBtn.addEventListener("click", render);
