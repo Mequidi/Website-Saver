@@ -5,37 +5,58 @@ const deleteBtn = document.getElementById("delete-btn");
 const ulEl = document.getElementById("ul-el");
 const savedUrlBtn = document.getElementById("saved-url-btn");
 
+const urlFromStorage = JSON.parse(localStorage.getItem("url"));
 let url = [];
+console.log(url.length)
 
-function render(){ 
-    console.log("saved url button clicked");
+function render(array){ 
+
     let listEl = "";
-    url = getUrl(url,"url");
-    console.log(url);
-    for (let i = 0; i < url.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         listEl += `<li>
-            <a href="${url[i]}"> 
-                ${url[i]}
+            <a href="${array[i]}"> 
+                ${array[i]}
             </a>
         </li>`; 
     }
     ulEl.innerHTML = listEl;
 }
-function getUrl(variable,key)
+// function getUrl(variable,key)
+// {
+//     variable = JSON.parse(localStorage.getItem(key));
+//     return variable;
+// }
+
+function storeUrl(variable,key)
 {
-    variable = JSON.parse(localStorage.getItem(key));
-    return variable;
+    localStorage.setItem(key,JSON.stringify(variable));
 }
 
-function storeUrl()
-{
-    localStorage.setItem("url",JSON.stringify(url));
-}
+function savedUrlFunc(){
+    console.log("saved url button clicked");
+    // url = getUrl(url,"url");
+    // url = JSON.parse(localStorage.getItem("url"));
+    if(urlFromStorage)
+    {
+        url = urlFromStorage; 
+        console.log(url);
+        render(url);
+    }
+    else    
+    {
+        console.log("didnt enter the loop");
+        render(url);
+    }
 
+
+}
 saveBtn.addEventListener("click", function () {
     console.log("save button clicked!");
     url.push(inputEl.value);
-    storeUrl();
+    inputEl.innerText= "nikhil";
+    if(url){
+        storeUrl(url,"url");
+    }
 })
 
 tabBtn.addEventListener("click", function () {
@@ -44,7 +65,10 @@ tabBtn.addEventListener("click", function () {
 
 deleteBtn.addEventListener("dblclick", function () {
     console.log("deleted button double clicked!");
-    
+    localStorage.clear();
+    url = [];
+    ulEl.textContent="";
+
 })
 
-savedUrlBtn.addEventListener("click", render);
+savedUrlBtn.addEventListener("click", savedUrlFunc);
