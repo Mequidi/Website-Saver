@@ -5,10 +5,11 @@ const deleteBtn = document.getElementById("delete-btn");
 const ulEl = document.getElementById("ul-el");
 const savedUrlBtn = document.getElementById("saved-url-btn");
 
-const urlFromStorage = JSON.parse(localStorage.getItem("url"));
-// let isStorageEmpty = true
+let urlFromStorage = JSON.parse(localStorage.getItem("urlArray"));
 let urlArray = [];
 console.log(urlArray.length)
+
+
 
 function render(array){ 
 
@@ -22,62 +23,56 @@ function render(array){
     }
     ulEl.innerHTML = listEl;
 }
-// function getUrl(variable,key)
-// {
-//     variable = JSON.parse(localStorage.getItem(key));
-//     return variable;
-// }
 
 function storeUrl(variable,key)
 {
     localStorage.setItem(key,JSON.stringify(variable));
 }
 
-function savedUrlFunc(){
-    // console.log("saved url button clicked");
-    // url = getUrl(url,"url");
-    // url = JSON.parse(localStorage.getItem("url"));
-    if(urlFromStorage)
+function appendHTTP()
+{
+    let http = "http://";
+  
+    for(let i = 0 ; i < urlArray.length ; i++ )
     {
-        urlArray = urlFromStorage; 
-        console.log(urlArray);
-        render(urlArray);
-    }
-    else    
-    {
-        console.log("didnt enter the loop");
-        render(urlArray);
+        if(urlArray[i].search(http) == -1)
+            urlArray[i] = http + urlArray[i];
     }
 }
 
-saveBtn.addEventListener("click", function () {
-    // console.log("save button clicked!");
+saveBtn.addEventListener("click", function () { 
     urlArray.push(inputEl.value);
-    if(urlArray){
+    appendHTTP();
+    if(urlArray)
         storeUrl(urlArray,"urlArray");
-        // isStorageEmpty = false;
-    }
 })
 
 tabBtn.addEventListener("click", function () {
-    // console.log("tab button clicked!");
     chrome.tabs.query({active:true,currentWindow:true},function (tabs){
         urlArray.push(tabs[0].url);
         storeUrl(urlArray,"urlArray");
     })
-    
-    // let test = window.location.hostname;
-    // url.push(test);
-    // if(url)
-    //     storeUrl(url,"url");
 })
 
 deleteBtn.addEventListener("dblclick", function () {
-    // console.log("deleted button double clicked!");
-    localStorage.clear();
+    window.localStorage.clear();
     urlArray = [];
+    console.log(urlArray);
     ulEl.textContent="";
-
 })
 
-savedUrlBtn.addEventListener("click", savedUrlFunc);
+savedUrlBtn.addEventListener("click", function(){
+    
+        if(urlFromStorage)
+        {
+            urlArray = urlFromStorage; 
+            console.log(urlArray);
+            render(urlArray);
+        }
+        else    
+        {
+            console.log("didnt enter the loop");
+            render(urlArray);
+        }
+    
+});
